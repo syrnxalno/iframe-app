@@ -1,0 +1,56 @@
+import { useEffect, useState } from "react";
+import "./App.css";
+
+function App() {
+  const [message, setMessage] = useState("Hi Archana"); // Default message
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = `https://cdn.jsdelivr.net/gh/syrnxalno/cdn-script-hosting@main/cdn-script1.js`;
+    script.async = true;
+
+    script.onload = () => {
+      console.log("Script detected!");
+      setScriptLoaded(true);
+    };
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleMessage = (event) => {
+      if (event.origin !== "http://localhost:5173") return;
+
+      if (event.data.type === "DATA_RESPONSE") {
+        console.log("Iframe received data:", event.data.message);
+        setMessage(scriptLoaded ? event.data.message : "Hi Archana");
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, [scriptLoaded]);
+
+  const requestDataFromParent = () => {
+    console.log("Iframe requesting data from parent...");
+    window.parent.postMessage({ type: "REQUEST_DATA" }, "http://localhost:5173");
+  };
+
+  return (
+    <div className="iframe-container">
+      <div className="iframe-card">
+        <p className="success-message">{message}</p>
+        <button onClick={requestDataFromParent} className="btn">
+          Request Data from Parent
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default App;
