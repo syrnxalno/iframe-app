@@ -24,7 +24,7 @@ function App() {
 
   useEffect(() => {
     const handleMessage = (event) => {
-      if (event.origin !== "http://localhost:5173") return;
+      if (event.origin !== "https://cdn-test-five.vercel.app/") return;
 
       if (event.data.type === "DATA_RESPONSE") {
         console.log("Iframe received data:", event.data.message);
@@ -38,7 +38,7 @@ function App() {
 
   const requestDataFromParent = () => {
     console.log("Iframe requesting data from parent...");
-    window.parent.postMessage({ type: "REQUEST_DATA" }, "http://localhost:5173");
+    window.parent.postMessage({ type: "REQUEST_DATA" }, "https://cdn-test-five.vercel.app/");
   };
 
   return (
