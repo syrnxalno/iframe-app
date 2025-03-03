@@ -7,7 +7,7 @@ function App() {
 
   useEffect(() => {
     const script = document.createElement("script");
-    script.src = `https://cdn.jsdelivr.net/gh/syrnxalno/cdn-script-hosting@main/cdn-script1.js`;
+    script.src = `jsDelivr_url`;
     script.async = true;
 
     script.onload = () => {
